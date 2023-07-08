@@ -4,7 +4,7 @@
 
 Install Django
 ```bash
-  https://www.djangoproject.com/download/
+  pip install Django
 ```
 
 To integrate django with mysql, install mysqlclient & mysql server (workbench recommended)
