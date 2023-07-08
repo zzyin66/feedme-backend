@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from .models import Newsletter, User
+from django.http import HttpResponse
+# from .models import Newsletter, User
 from google_news_feed import GoogleNewsFeed
 from newsplease import NewsPlease
 from newsplease import NewsArticle
 
-def fetch_google_news_feed():
+def fetch_google_news_feed(request):
     gn = GoogleNewsFeed(language="en", country="CA", resolve_internal_links=True)
     top_results = gn.top_headlines()
     links = [result.link for result in top_results]
@@ -12,5 +13,9 @@ def fetch_google_news_feed():
     for link in links:
         article = NewsPlease.from_url(link)
         articles.append(article)
-    return articles
+        
+    articles_string = "\n".join([f"{article.title} \n" for article in articles])
+    
+    # Return the articles as an HTTP response
+    return HttpResponse(articles_string)
 
