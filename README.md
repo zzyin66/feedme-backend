@@ -2,14 +2,14 @@
 
 ## Installation
 
-Install Django
+Install Dependencies
 ```bash
-  pip install Django
+  pip install -r requirements.txt
 ```
 
 To integrate django with mysql, install mysqlclient & mysql server (workbench recommended)
 
-Install mysql client
+Install mysql client (if somehow not installed by requirements.txt)
 ```bash
   pip install mysqlclient
 ```

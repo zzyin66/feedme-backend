@@ -1,6 +1,19 @@
 from django.db import models
 import uuid
 
+class Feed(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+    content = models.TextField()  
+    title = models.CharField(max_length=100)
+    url = models.CharField(max_length=100)
+    date = models.DateField()
+    
+    class Meta:
+        ordering = ["date"]
+    
+    def __str__(self):
+        return self.title
+
 class User(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
     username = models.CharField(max_length=100)
@@ -10,18 +23,4 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
-
-
-class Feed(models.Model):
-    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
-    content = models.TextField()  
-    title = models.CharField()
-    url = models.CharField()
-    date = models.DateField()
-    
-    class Meta:
-        ordering = ["date"]
-    
-    def __str__(self):
-        return self.title
 
