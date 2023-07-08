@@ -12,6 +12,7 @@ def fetch_google_news_feed(request):
     articles = []
     for link in links:
         article = NewsPlease.from_url(link)
+        print(article)
         articles.append(article)
         
     articles_string = "\n".join([f"{article.title} \n" for article in articles])

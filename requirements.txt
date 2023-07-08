@@ -1,7 +1,6 @@
 Django==4.2.3
+django-environ
 environ==1.0
 mysqlclient==2.1.0
 google-news-feed==1.1.0
 news-please
-gunicorn==20.1.0
-martor==1.6.26
