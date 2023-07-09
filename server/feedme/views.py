@@ -3,19 +3,27 @@ from django.http import HttpResponse
 # from .models import Newsletter, User
 from google_news_feed import GoogleNewsFeed
 from newsplease import NewsPlease
-from newsplease import NewsArticle
+from newspaper import Source
 
 def fetch_google_news_feed(request):
-    gn = GoogleNewsFeed(language="en", country="CA", resolve_internal_links=True)
-    top_results = gn.top_headlines()
-    links = [result.link for result in top_results]
-    articles = []
-    for link in links:
-        article = NewsPlease.from_url(link)
-        print(article)
-        articles.append(article)
+    
+    cnn_paper = Source("https://thestar.com")
+    
+    cnn_paper.clean_memo_cache()
+    
+    cnn_paper.build()
+
+
+    links = cnn_paper.article_urls()
+    
+    articles = NewsPlease.from_urls(links[:10])
+    
+    print(articles)
+    
+    for article in articles.values():
+        print(article.title)
         
-    articles_string = "\n".join([f"{article.title} \n" for article in articles])
+    articles_string = "\n".join([f"{article.title}" for article in articles.values()])
     
     # Return the articles as an HTTP response
     return HttpResponse(articles_string)
