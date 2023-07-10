@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     'feedme'
 ]
 
@@ -95,6 +96,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+# scheduled jobs 
+CRONJOBS = [
+    # every 12 hours
+    # ('0 */12 * * *', 'feedme.cron.scraper.scrape_news')
+    ('*/5 * * * *', 'feedme.cron.scraper.scrape_news', '>> /tmp/test.log')
 ]
 
 

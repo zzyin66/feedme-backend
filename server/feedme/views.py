@@ -21,6 +21,7 @@ def fetch_google_news_feed(request):
     print(articles)
     
     for article in articles.values():
+        print(article.date_publish)
         print(article.title)
         
     articles_string = "\n".join([f"{article.title}" for article in articles.values()])

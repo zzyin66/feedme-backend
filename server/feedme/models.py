@@ -3,10 +3,11 @@ import uuid
 
 class Feed(models.Model):
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
-    content = models.TextField()  
+    description = models.TextField()  
     title = models.CharField(max_length=100)
     url = models.CharField(max_length=100)
     date = models.DateField()
+    image = models.TextField()
     
     class Meta:
         ordering = ["date"]

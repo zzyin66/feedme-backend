@@ -5,3 +5,4 @@ mysqlclient==2.1.0
 google-news-feed==1.1.0
 news-please
 newspaper3k
+django_crontab
