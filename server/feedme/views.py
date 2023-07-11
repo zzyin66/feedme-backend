@@ -6,26 +6,29 @@ from newsplease import NewsPlease
 from newspaper import Source
 
 def fetch_google_news_feed(request):
+    gn = GoogleNewsFeed(language="en", country="CA", resolve_internal_links=True)
     
-    cnn_paper = Source("https://thestar.com")
-    
-    cnn_paper.clean_memo_cache()
-    
-    cnn_paper.build()
-
-
-    links = cnn_paper.article_urls()
-    
-    articles = NewsPlease.from_urls(links[:10])
-    
-    print(articles)
-    
-    for article in articles.values():
-        print(article.date_publish)
-        print(article.title)
+    for category in ["world"]:
+        results = gn.query_topic(category)
+        links = [result.link for result in results]
         
-    articles_string = "\n".join([f"{article.title}" for article in articles.values()])
+        # article = ""
+        try:
+            article = NewsPlease.from_url(links[0], timeout=5)
+        except:
+            pass
+        
+        # for link in links:
+        #     try:
+        #         print(link)
+        #         article = NewsPlease.from_url(link, timeout=5)
+        #     except:
+        #         pass
+        
+        # for article in articles.values():
+        #     if article.title is None or article.description is None or article.maintext is None:
+        #         pass
     
     # Return the articles as an HTTP response
-    return HttpResponse(articles_string)
+    return HttpResponse(article.title + " " + article.maintext)
 

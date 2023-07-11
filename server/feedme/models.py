@@ -8,6 +8,8 @@ class Feed(models.Model):
     url = models.CharField(max_length=100)
     date = models.DateField()
     image = models.TextField()
+    category = models.TextField()
+    keywords = models.JSONField()
     
     class Meta:
         ordering = ["date"]

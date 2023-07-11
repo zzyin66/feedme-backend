@@ -6,3 +6,4 @@ google-news-feed==1.1.0
 news-please
 newspaper3k
 django_crontab
+scikit-learn
