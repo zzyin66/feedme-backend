@@ -1,0 +1,73 @@
+<!-- recommendations_template.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recommendations</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+      function read_feed(feed_id) {
+        console.log("hello");
+        data = {
+          user_id: "583c3e76c4a74e0bbcdd433fa55cd876",
+          feed_id,
+        };
+
+        $.ajaxSetup({
+          beforeSend: function (xhr, settings) {
+            function getCookie(name) {
+              var cookieValue = null;
+              if (document.cookie && document.cookie != "") {
+                var cookies = document.cookie.split(";");
+                for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) == name + "=") {
+                    cookieValue = decodeURIComponent(
+                      cookie.substring(name.length + 1)
+                    );
+                    break;
+                  }
+                }
+              }
+              return cookieValue;
+            }
+            if (
+              !(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))
+            ) {
+              // Only send the token to relative URLs i.e. locally.
+              xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+            }
+          },
+        });
+
+        $.ajax({
+          type: "POST",
+          url: "/mark_read/",
+          data: JSON.stringify(data),
+          processData: false,
+          contentType: false,
+          success: function (json) {
+            alert(json);
+          },
+        });
+        return false;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Recommendations</h1>
+    <ul>
+      {% for recommendation in recommendations %}
+      <li>
+        <a
+          href="{{recommendation.url}}"
+          target="_blank"
+          onclick="read_feed('{{recommendation.id}}')"
+        >
+          {{recommendation.title}}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

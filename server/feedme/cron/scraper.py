@@ -10,13 +10,14 @@ def scrape_news():
     gn = GoogleNewsFeed(language="en", country="CA", resolve_internal_links=True)
     
     # TODO - Make concurrent
-    for category in ["world"]:
+    for category in categories:
         results = gn.query_topic(category)
-        links = [result.link for result in results]
         
-        for link in links:
+        for result in results:
+            if Feed.objects.filter(url=result.link).exists() or Feed.objects.filter(title=result.title).exists():
+                pass
             try:
-                article = NewsPlease.from_url(link, timeout=5)
+                article = NewsPlease.from_url(result.link, timeout=5)
                 if article.title is None or article.description is None or article.maintext is None:
                     pass
                 # TFIDF and extract keywords
@@ -33,10 +34,8 @@ def scrape_news():
                 
                 for idx, term in enumerate(terms):
                     keywords[term] = (tfidf_term_vectors[0,idx])
-                    
-                print(keywords)
                 
-                Feed.objects.create(title=article.title, description=article.description, image=article.image_url, date=article.date_publish, url=article.url, category = category, keywords=keywords)
+                Feed.objects.create(title=result.title, description=article.description, image=article.image_url, date=result.pubDate, url=result.link, category = category, keywords=keywords)
             except:
                 pass
 

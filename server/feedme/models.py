@@ -22,8 +22,9 @@ class User(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
     email = models.EmailField()
-    reccomendations = models.ManyToManyField(Feed)
+    feed_history = models.ManyToManyField(Feed, related_name="feed_history")
+    reccomendations = models.ManyToManyField(Feed, related_name="recommendations")
+    keywords = models.JSONField()
 
     def __str__(self):
         return self.username
-

@@ -100,9 +100,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # scheduled jobs 
 CRONJOBS = [
-    # every 12 hours
-    # ('0 */12 * * *', 'feedme.cron.scraper.scrape_news')
-    ('0 */4 * * *', 'feedme.cron.scraper.scrape_news', '>> /tmp/test.log')
+    # every 4 hours
+    ('0 */4 * * *', 'feedme.cron.scraper.scrape_news', '>> /tmp/test.log'),
+    ('0 0 * * *', 'feedme.cron.score_reduction.score_reduction', '>> /tmp/test.log')
+    
 ]
 
 
