@@ -15,7 +15,7 @@ def scrape_news():
         
         for result in results:
             if Feed.objects.filter(url=result.link).exists() or Feed.objects.filter(title=result.title).exists():
-                pass
+                continue
             try:
                 article = NewsPlease.from_url(result.link, timeout=5)
                 if article.title is None or article.description is None or article.maintext is None:

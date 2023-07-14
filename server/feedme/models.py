@@ -23,7 +23,7 @@ class User(models.Model):
     password = models.CharField(max_length=100)
     email = models.EmailField()
     feed_history = models.ManyToManyField(Feed, related_name="feed_history")
-    reccomendations = models.ManyToManyField(Feed, related_name="recommendations")
+    recommendations = models.ManyToManyField(Feed, related_name="recommendations")
     keywords = models.JSONField()
 
     def __str__(self):

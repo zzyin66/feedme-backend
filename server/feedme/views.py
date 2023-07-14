@@ -5,18 +5,19 @@ from google_news_feed import GoogleNewsFeed
 from newsplease import NewsPlease
 from newspaper import Source
 from datetime import date, timedelta
-from .recommendations.content import generate_content_recommendations
+from .recommendations.hybrid import hybrid_recommendations
 import json
 
 def fetch_google_news_feed(request):
     #User.objects.create(username="test", password="1234", email="test@test.com", keywords={})
+    #User.objects.create(username="test2", password="1234", email="test2@test.com", keywords={})
     return HttpResponse("hello world")
 
 def recommendations(request):
-    generate_content_recommendations("583c3e76c4a74e0bbcdd433fa55cd876")
-    user = User.objects.get(id="583c3e76c4a74e0bbcdd433fa55cd876")
+    hybrid_recommendations("7074d947082441f49f8818d08069fd32")
+    user = User.objects.get(id="7074d947082441f49f8818d08069fd32")
     
-    recommendations = user.reccomendations.all()
+    recommendations = user.recommendations.all()
     
     context = {'recommendations': recommendations}
 

@@ -8,7 +8,7 @@
       function read_feed(feed_id) {
         console.log("hello");
         data = {
-          user_id: "583c3e76c4a74e0bbcdd433fa55cd876",
+          user_id: "7074d947082441f49f8818d08069fd32",
           feed_id,
         };
 
@@ -42,7 +42,7 @@
 
         $.ajax({
           type: "POST",
-          url: "/mark_read/",
+          url: "/api/mark_read/",
           data: JSON.stringify(data),
           processData: false,
           contentType: false,

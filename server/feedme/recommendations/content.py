@@ -5,7 +5,6 @@ def generate_content_recommendations(id):
     try:
         user = User.objects.get(id=id)
         
-        user.reccomendations.clear()
         today = date.today()
         date_minimum = today - timedelta(days=1)
         feed_history = user.feed_history.all()
@@ -19,9 +18,7 @@ def generate_content_recommendations(id):
             categories = ["world", "nation", "business", "technology", "entertainment", "science", "sports", "health"]
             for category in categories:
                 recommendations.extend(list(Feed.objects.filter(date__gte=date_minimum, category=category).exclude(id__in=read_feed_ids)[:3]))
-            user.reccomendations.add(*recommendations)
-            user.save()
-            return
+            return [feed.id for feed in recommendations]
         
         #getting all news feeds that the user has not read
         feeds = Feed.objects.filter(date__gte=date_minimum).exclude(id__in=read_feed_ids)
@@ -44,8 +41,7 @@ def generate_content_recommendations(id):
         
         recommendations = list(feed_dict.keys())[:15]
         
-        user.reccomendations.add(*recommendations)
-        user.save()
-        
+        return recommendations
+    
     except:
         return 
