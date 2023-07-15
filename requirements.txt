@@ -7,3 +7,6 @@ news-please
 newspaper3k
 django_crontab
 scikit-learn
+djangorestframework
+PyJWT
+django-cors-headers
