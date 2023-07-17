@@ -9,11 +9,6 @@ from .serializers import UserSerializer, FeedSerializer
 import jwt, datetime
 import json
 
-def fetch_google_news_feed(request):
-    #User.objects.create(username="test", password="1234", email="test@test.com", keywords={})
-    #User.objects.create(username="test2", password="1234", email="test2@test.com", keywords={})
-    return HttpResponse("hello world")
-
 class Recommendations(APIView):
     def get(self, request):
         token = request.COOKIES.get('jwt')
