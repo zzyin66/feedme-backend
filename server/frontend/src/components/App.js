@@ -2,14 +2,40 @@ import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route, Link, Redirect } from "react-router-dom";
 import { Home } from "./Home";
+import { Login } from "./Login";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Register } from "./Register";
+
+const theme = createTheme({
+  status: {
+    danger: "#e53e3e",
+  },
+  palette: {
+    primary: {
+      main: "#000000",
+      darker: "#053e85",
+    },
+    neutral: {
+      main: "#64748B",
+      contrastText: "#fff",
+    },
+    test: {
+      main: "#000000",
+    },
+  },
+});
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
