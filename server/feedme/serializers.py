@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Feed
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +18,11 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+    
+class FeedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feed
+        fields = ['id', 'description', 'title', 'url', 'date', 'image', 'category']
+        extra_kwargs = {
+            'keywords': {'required': False}
+        }

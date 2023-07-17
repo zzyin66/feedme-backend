@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .recommendations.hybrid import hybrid_recommendations
-from .serializers import UserSerializer
+from .serializers import UserSerializer, FeedSerializer
 import jwt, datetime
 import json
 
@@ -14,15 +14,26 @@ def fetch_google_news_feed(request):
     #User.objects.create(username="test2", password="1234", email="test2@test.com", keywords={})
     return HttpResponse("hello world")
 
-def recommendations(request):
-    hybrid_recommendations("7074d947082441f49f8818d08069fd32")
-    user = User.objects.get(id="7074d947082441f49f8818d08069fd32")
-    
-    recommendations = user.recommendations.all()
-    
-    context = {'recommendations': recommendations}
-
-    return render(request, 'recommendations_template.html', context)
+class Recommendations(APIView):
+    def get(self, request):
+        token = request.COOKIES.get('jwt')
+        
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+        
+        try:
+            payload = jwt.decode(token, 'feedme', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated')
+        
+        user = User.objects.get(id=payload['id'])
+        
+        hybrid_recommendations(user.id)
+        recommendations = user.recommendations.all()
+        
+        serializer = FeedSerializer(recommendations, many=True)
+        
+        return Response(serializer.data)
 
 def mark_article_as_read(request):
     
