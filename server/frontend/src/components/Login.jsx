@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -7,9 +7,13 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import axios from 'axios'
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState(false);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -18,12 +22,18 @@ const Login = () => {
       password: data.get("password"),
     });
 
-    const res = await axios.post("/api/login/", {
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const res = await axios.post("/api/login/", {
+        email: data.get("email"),
+        password: data.get("password"),
+      });
+      console.log(res.data.jwt);
 
-    console.log(res.data.jwt);
+      navigate("/");
+    } catch (error) {
+      setError(true);
+      console.error("Login failed:", error);
+    }
   };
 
   return (
