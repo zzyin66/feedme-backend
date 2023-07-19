@@ -2,9 +2,17 @@
 
 ## Installation
 
-Install Dependencies
+Make sure to run in Python virtual environment for backend server
+
+Install Backend Dependencies
 ```bash
   pip install -r requirements.txt
+```
+
+Install Frontend Dependencies
+Cd into /frontend
+```bash
+  npm i
 ```
 
 To integrate django with mysql, install mysqlclient & mysql server (workbench recommended)
@@ -57,6 +65,11 @@ Run the server
 ```bash
   python manage.py runserver
 ```
+
+## Running the frontend app
+Cd into /frontend
+```bash
+  npm run dev
 
 ## Migrations
 
