@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .recommendations.hybrid import hybrid_recommendations
 from .serializers import UserSerializer, FeedSerializer
+from rest_framework.exceptions import NotFound
 import jwt, datetime
-import json
 
 class Recommendations(APIView):
     def get(self, request):
@@ -30,35 +30,43 @@ class Recommendations(APIView):
         
         return Response(serializer.data)
 
-def mark_article_as_read(request):
-    
-    request_data = json.loads(request.body)
-    
-    user_id = request_data['user_id']
-    feed_id = request_data['feed_id']
-    
-    try:
-        user = User.objects.get(id=user_id)
-        feed = Feed.objects.get(id=feed_id)
-        user_keywords = user.keywords
-        feed_keywords = feed.keywords
-        
-        updated_keywords = user_keywords.copy()
-        
-        for key, value in feed_keywords.items():
-            if key in updated_keywords:
-                key_value = updated_keywords[key]
-                updated_keywords[key] += float(value) + float(key_value)
-            else:
-                updated_keywords[key] = float(value)   
+class MarkArticle(APIView):
+    def post(self, request):
+        token = request.COOKIES.get('jwt')
+            
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+            
+        try:
+            payload = jwt.decode(token, 'feedme', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Unauthenticated')
 
+        user_id = payload['id']
+        feed_id = request.data['feed_id']
         
-        user.keywords = updated_keywords
-        user.feed_history.add(feed_id)
-        user.save()
-    except:
-        pass    
-    return HttpResponse("read this article")
+        try:
+            user = User.objects.get(id=user_id)
+            feed = Feed.objects.get(id=feed_id)
+            user_keywords = user.keywords
+            feed_keywords = feed.keywords
+            
+            updated_keywords = user_keywords.copy()
+            
+            for key, value in feed_keywords.items():
+                if key in updated_keywords:
+                    key_value = updated_keywords[key]
+                    updated_keywords[key] += float(value) + float(key_value)
+                else:
+                    updated_keywords[key] = float(value)   
+
+            
+            user.keywords = updated_keywords
+            user.feed_history.add(feed_id)
+            user.save()
+        except:
+            pass    
+        return Response("article read!")
 
 class Register(APIView):
     def post(self, request):
@@ -118,10 +126,30 @@ class UserView(APIView):
     
 class Logout(APIView):
     def post(self, request):
-        response = Response
+        response = Response()
         response.delete_cookie('jwt')
         response.data = {
             'message': "success"
         }
         
         return response
+    
+class Newsfeed(APIView):
+    def get(self, request):
+        token = request.COOKIES.get('jwt')
+        
+        if not token:
+            raise AuthenticationFailed('Unauthenticated')
+    
+        category = request.query_params.get('category')
+        
+        newsfeed = Feed.objects.filter(category=category).order_by('-date')[:20]
+        
+        if not newsfeed:
+            raise NotFound('No newsfeed found for the specified category')
+        
+        serializer = FeedSerializer(newsfeed, many=True)
+
+        return Response(serializer.data)
+        
+        

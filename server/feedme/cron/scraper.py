@@ -4,14 +4,26 @@ from ..models import Feed
 from sklearn.feature_extraction.text import TfidfVectorizer
 from google_news_feed import GoogleNewsFeed
 
+TOPICS = {
+    "business": "CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx6TVdZU0JXVnVMVWRDR2dKRFFTZ0FQAQ",
+    "technology": "CAAqKggKIiRDQkFTRlFvSUwyMHZNRGRqTVhZU0JXVnVMVWRDR2dKRFFTZ0FQAQ",
+    "entertainment": "CAAqKggKIiRDQkFTRlFvSUwyMHZNREpxYW5RU0JXVnVMVWRDR2dKRFFTZ0FQAQ",
+    "science": "CAAqKggKIiRDQkFTRlFvSUwyMHZNRFp0Y1RjU0JXVnVMVWRDR2dKRFFTZ0FQAQ",
+    "sports": "CAAqKggKIiRDQkFTRlFvSUwyMHZNRFp1ZEdvU0JXVnVMVWRDR2dKRFFTZ0FQAQ",
+    "health": "CAAqJQgKIh9DQkFTRVFvSUwyMHZNR3QwTlRFU0JXVnVMVWRDS0FBUAE",
+    "world": "CAAqKggKIiRDQkFTRlFvSUwyMHZNRGx1YlY4U0JXVnVMVWRDR2dKRFFTZ0FQAQ",
+    "nation": "CAAqJggKIiBDQkFTRWdvSkwyMHZNR1F3TmpCbkVnVmxiaTFIUWlnQVAB"
+}
+
 
 def scrape_news():
-    categories = ["world", "nation", "business", "technology", "entertainment", "science", "sports", "health"]
+    categories = ["business", "technology", "entertainment", "science", "sports", "health", "world", "nation"]
     gn = GoogleNewsFeed(language="en", country="CA", resolve_internal_links=True)
     
     # TODO - Make concurrent
     for category in categories:
-        results = gn.query_topic(category)
+        category_hash = TOPICS[category]
+        results = gn.query_topic(category_hash)
         
         for result in results:
             if Feed.objects.filter(url=result.link).exists() or Feed.objects.filter(title=result.title).exists():
