@@ -13,7 +13,6 @@
 }
 
 .title {
-  text-decoration: none;
   font-size: 24px;
   margin: 0;
   color: #fff;
@@ -157,7 +156,6 @@
   font-size: 1.5rem;
   color: #fff;
   font-weight: 400;
-  text-decoration: none;
   /* text-shadow: 0px 0px 2rem rgb(244, 143, 177); */
   margin-top: 24px;
 
@@ -182,7 +180,7 @@
   display: flex;
   z-index: 3;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   overflow: hidden;
   font-size: 16px;
   letter-spacing: 0.64px;

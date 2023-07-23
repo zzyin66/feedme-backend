@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Newscard } from "./Newscard";
 import "./Newsfeed.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Newsfeed = ({ isRecommendation }) => {
   const [data, setData] = useState([]);
   const { category } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getNewsfeed = async () => {

@@ -47,6 +47,8 @@ class MarkArticle(APIView):
         
         try:
             user = User.objects.get(id=user_id)
+            if user.feed_history.filter(id=feed_id).exists():
+                return Response("article read!")
             feed = Feed.objects.get(id=feed_id)
             user_keywords = user.keywords
             feed_keywords = feed.keywords
@@ -151,5 +153,4 @@ class Newsfeed(APIView):
         serializer = FeedSerializer(newsfeed, many=True)
 
         return Response(serializer.data)
-        
         
