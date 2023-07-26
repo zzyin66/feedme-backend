@@ -1,11 +1,11 @@
 import React from "react";
 import { render } from "react-dom";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "./Home";
-import { Login } from "./Login";
+import { Home } from "./Home/Home";
+import { Login } from "./Login/Login";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Register } from "./Register";
-import { Newsfeed } from "./Newsfeed";
+import { Register } from "./Register/Register";
+import { Newsfeed } from "./Newsfeed/Newsfeed";
 
 const theme = createTheme({
   status: {

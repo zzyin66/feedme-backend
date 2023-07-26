@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Newscard } from "./Newscard";
+import { Newscard } from "../Newscard/Newscard";
 import "./Newsfeed.css";
 import { useNavigate, useParams } from "react-router-dom";
 import InfiniteScroll from "react-infinite-scroll-component";

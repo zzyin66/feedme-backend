@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./Home.css";
-import { Navbar } from "./Navbar";
+import { Navbar } from "../Navbar/Navbar";
 import { Outlet } from "react-router-dom";
 
 const Home = () => {

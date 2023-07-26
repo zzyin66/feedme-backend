@@ -1,5 +1,6 @@
 from ..models import Feed, User
 from datetime import date, timedelta
+import random
 
 def generate_content_recommendations(id):
     try:
@@ -10,7 +11,7 @@ def generate_content_recommendations(id):
         feed_history = user.feed_history.all()
         read_feed_ids = [feed.id for feed in feed_history]
         print(read_feed_ids)
-        if not user.keywords:
+        if not user.keywords or len(read_feed_ids) < 5:
             # user as not associated keywords
             # recommend 2 articles from each category
             print("generating default recommendations")
@@ -18,6 +19,7 @@ def generate_content_recommendations(id):
             categories = ["world", "nation", "business", "technology", "entertainment", "science", "sports", "health"]
             for category in categories:
                 recommendations.extend(list(Feed.objects.filter(date__gte=date_minimum, category=category).exclude(id__in=read_feed_ids)[:3]))
+            random.shuffle(recommendations)
             return [feed.id for feed in recommendations]
         
         #getting all news feeds that the user has not read
