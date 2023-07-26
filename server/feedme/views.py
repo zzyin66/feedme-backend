@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import User, Feed
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .recommendations.hybrid import hybrid_recommendations
 from .serializers import UserSerializer, FeedSerializer
 from rest_framework.exceptions import NotFound
+from rest_framework.pagination import PageNumberPagination
 import jwt, datetime
 
 class Recommendations(APIView):
@@ -136,21 +138,24 @@ class Logout(APIView):
         
         return response
     
-class Newsfeed(APIView):
-    def get(self, request):
-        token = request.COOKIES.get('jwt')
-        
+class Newsfeed(ListAPIView):
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        token = self.request.COOKIES.get('jwt')
         if not token:
             raise AuthenticationFailed('Unauthenticated')
-    
-        category = request.query_params.get('category')
-        
-        newsfeed = Feed.objects.filter(category=category).order_by('-date')[:20]
-        
+
+        category = self.request.query_params.get('category')
+        newsfeed = Feed.objects.filter(category=category).order_by('-date')
         if not newsfeed:
             raise NotFound('No newsfeed found for the specified category')
-        
-        serializer = FeedSerializer(newsfeed, many=True)
 
-        return Response(serializer.data)
+        return newsfeed
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        serializer = FeedSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
         

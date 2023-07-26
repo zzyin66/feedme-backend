@@ -1,6 +1,6 @@
 .newsfeed-content {
   width: 100%;
-  overflow-x: scroll;
+  overflow-y: scroll;
 }
 
 .newsfeed-header {
